@@ -1,6 +1,9 @@
 const formidable = require('formidable');
+const merge = require('lodash/merge');
+
 const Shop = require('../models/shop.model');
 const { uploadSingleFile } = require('../middlewares/upload.middleware');
+const { removeFile } = require('../helpers/upload.helper');
 const { formatError } = require('../helpers/error.helper');
 
 module.exports.create = async (req, res) => {
@@ -48,4 +51,39 @@ module.exports.listByOwner = async (req, res, next) => {
 
 module.exports.read = async (req, res) => res.json(req.shop);
 
-module.exports.update = async (req, res) => {};
+const cleanedShopData = (shop, data) => {
+  delete data._id;
+  delete data.image;
+  delete data.owner;
+
+  return merge(shop, data);
+};
+
+module.exports.update = async (req, res) => {
+  let shop = req.shop;
+
+  try {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, async (err, fields, files) => {
+      shop = cleanedShopData(shop, fields);
+    });
+
+    await uploadSingleFile(req, res);
+
+    if (req.file) {
+      await removeFile(shop.image);
+      shop.image = req.file.filename;
+    } else {
+      user = cleanedShopData(shop, req.body);
+    }
+
+    await shop.save();
+
+    let updatedShop = await Shop.findById(shop._id).populate('owner', '_id name');
+    return res.json(updatedShop);
+  } catch (err) {
+    res.status(400).json(formatError(err));
+  }
+};

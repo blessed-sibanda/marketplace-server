@@ -16,7 +16,8 @@ const shopById = async (req, res, next, id) => {
 };
 
 const isShopOwner = async (req, res, next) => {
-  const isOwner = req.shop && req.auth && req.auth.id === req.shop._id.toString();
+  const isOwner =
+    req.shop && req.auth && req.auth.id === req.shop.owner._id.toString();
   if (!isOwner) return res.status(403).json({ message: 'User is not authorized' });
   next();
 };
