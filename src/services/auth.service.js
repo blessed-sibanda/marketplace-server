@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const expressJwt = require('express-jwt');
+const User = require('../models/user.model');
 
 const config = require('../config');
 
@@ -26,9 +27,23 @@ const createJwt = (user) => {
   };
   const accessToken = jwt.sign(payload, config.jwtSecret, {
     subject: user._id.toString(),
-    expiresIn: '1d',
+    expiresIn: '3d',
   });
   return accessToken;
 };
 
-module.exports = { createJwt, requireAuth, isProfileOwner };
+const isSeller = async (req, res, next) => {
+  try {
+    let user = await User.findById(req.auth.id);
+    const authorized = user && user.seller;
+    if (!authorized)
+      return res.status(403).json({
+        message: 'User is not a seller',
+      });
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { createJwt, requireAuth, isProfileOwner, isSeller };
