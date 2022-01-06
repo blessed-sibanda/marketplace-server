@@ -6,5 +6,6 @@ const router = Router();
 
 router.post('/', requireAuth, isSeller, shopCtrl.create);
 router.get('/user/:userId', requireAuth, shopCtrl.listByOwner);
+router.get('/', shopCtrl.list);
 
 module.exports = router;

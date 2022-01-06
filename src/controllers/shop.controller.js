@@ -28,6 +28,15 @@ module.exports.create = async (req, res) => {
   }
 };
 
+module.exports.list = async (req, res, next) => {
+  try {
+    let shops = await Shop.find();
+    res.json(shops);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.listByOwner = async (req, res, next) => {
   try {
     let shops = await Shop.find({ owner: req.params.userId });
