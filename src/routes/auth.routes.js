@@ -1,6 +1,7 @@
 const { Router } = require('express');
-const { requireAuth, createJwt } = require('../services/auth.service');
+const { requireAuth } = require('../middlewares/auth.middleware');
 const User = require('../models/user.model');
+const { createJwt } = require('../helpers/auth.helper');
 
 const router = Router();
 

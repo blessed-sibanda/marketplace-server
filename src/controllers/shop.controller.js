@@ -47,3 +47,5 @@ module.exports.listByOwner = async (req, res, next) => {
 };
 
 module.exports.read = async (req, res) => res.json(req.shop);
+
+module.exports.update = async (req, res) => {};

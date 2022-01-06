@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const shopCtrl = require('../controllers/shop.controller');
-const { shopById } = require('../middlewares/shop.middleware');
-const { requireAuth, isSeller } = require('../services/auth.service');
+const { shopById, isShopOwner } = require('../middlewares/shop.middleware');
+const { requireAuth, isSeller } = require('../middlewares/auth.middleware');
 
 const router = Router();
 
@@ -10,5 +10,6 @@ router.post('/', requireAuth, isSeller, shopCtrl.create);
 router.get('/user/:userId', requireAuth, shopCtrl.listByOwner);
 router.get('/', shopCtrl.list);
 router.get('/:shopId', shopCtrl.read);
+router.put('/:shopId', requireAuth, isShopOwner, shopCtrl.update);
 
 module.exports = router;

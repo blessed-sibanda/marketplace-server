@@ -15,4 +15,10 @@ const shopById = async (req, res, next, id) => {
   }
 };
 
-module.exports = { shopById };
+const isShopOwner = async (req, res, next) => {
+  const isOwner = req.shop && req.auth && req.auth.id === req.shop._id.toString();
+  if (!isOwner) return res.status(403).json({ message: 'User is not authorized' });
+  next();
+};
+
+module.exports = { shopById, isShopOwner };
