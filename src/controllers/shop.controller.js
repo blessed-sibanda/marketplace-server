@@ -45,3 +45,5 @@ module.exports.listByOwner = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.read = async (req, res) => res.json(req.shop);

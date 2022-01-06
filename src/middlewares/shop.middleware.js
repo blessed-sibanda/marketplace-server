@@ -2,9 +2,9 @@ const Shop = require('../models/shop.model');
 
 const shopById = async (req, res, next, id) => {
   try {
-    let course = await Shop.findById(id).populate('owner', '_id name');
+    let shop = await Shop.findById(id).populate('owner', '_id name');
 
-    if (!course)
+    if (!shop)
       return res.status(404).json({
         error: 'Shop not found',
       });
