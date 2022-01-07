@@ -18,6 +18,13 @@ router.put(
   isShopOwner,
   productCtrl.update,
 );
+router.delete(
+  '/:shopId/product/:productId',
+  requireAuth,
+  isSeller,
+  isShopOwner,
+  productCtrl.delete,
+);
 
 router.post('/:shopId', requireAuth, isSeller, isShopOwner, productCtrl.create);
 router.get('/:shopId', productCtrl.listByShop);

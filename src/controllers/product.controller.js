@@ -110,3 +110,13 @@ module.exports.update = async (req, res) => {
     res.status(400).json(formatError(err));
   }
 };
+
+module.exports.delete = async (req, res, next) => {
+  try {
+    await removeFile(req.product.image);
+    await req.product.remove();
+    res.status(204).json({});
+  } catch (err) {
+    next(err);
+  }
+};
