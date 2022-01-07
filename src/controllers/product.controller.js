@@ -29,3 +29,16 @@ module.exports.create = async (req, res) => {
     res.status(400).json(formatError(err));
   }
 };
+
+module.exports.listByShop = async (req, res, next) => {
+  try {
+    let products = await Product.find({ shop: req.shop._id }).populate(
+      'shop',
+      '_id name',
+    );
+
+    res.json(products);
+  } catch (err) {
+    next(err);
+  }
+};

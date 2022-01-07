@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const config = require('../config');
 
 const productSchema = new mongoose.Schema(
   {
@@ -28,5 +29,14 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+productSchema.virtual('imageUrl').get(function () {
+  if (this.image) {
+    return config.filesUrl + this.image;
+  } else return '';
+});
+
+productSchema.set('toObject', { virtuals: true });
+productSchema.set('toJSON', { virtuals: true });
 
 module.exports = mongoose.model('Product', productSchema);

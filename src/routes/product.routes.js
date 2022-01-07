@@ -10,5 +10,6 @@ router.param('shopId', shopById);
 router.param('productId', productById);
 
 router.post('/:shopId', requireAuth, isSeller, isShopOwner, productCtrl.create);
+router.get('/:shopId', productCtrl.listByShop);
 
 module.exports = router;
