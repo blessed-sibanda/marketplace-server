@@ -68,3 +68,5 @@ module.exports.relatedProducts = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.read = async (req, res, next) => res.json(req.product);
