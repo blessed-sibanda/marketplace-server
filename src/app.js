@@ -8,6 +8,7 @@ const authRouter = require('./routes/auth.routes');
 const usersRouter = require('./routes/user.routes');
 const shopRouter = require('./routes/shop.routes');
 const uploadRouter = require('./routes/upload.routes');
+const productsRouter = require('./routes/product.routes');
 const { connectDb } = require('./helpers/db.helper');
 const config = require('./config');
 
@@ -26,6 +27,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/shops', shopRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/products', productsRouter);
 
 app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
