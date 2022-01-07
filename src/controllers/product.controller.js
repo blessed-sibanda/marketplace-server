@@ -120,3 +120,12 @@ module.exports.delete = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.listCategories = async (req, res, next) => {
+  try {
+    let products = await Product.distinct('category', {});
+    res.json(products);
+  } catch (err) {
+    next(err);
+  }
+};
