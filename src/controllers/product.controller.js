@@ -5,6 +5,19 @@ const { uploadSingleFile } = require('../middlewares/upload.middleware');
 const { removeFile } = require('../helpers/upload.helper');
 const Product = require('../models/product.model');
 
+module.exports.list = async (req, res, next) => {
+  const query = {};
+  if (req.query.search) query.name = { $regex: req.query.search, $options: 'i' };
+  if (req.query.category && req.query.category != 'All')
+    query.category = req.query.category;
+  try {
+    let products = await Product.find(query).populate('shop', '_id name');
+    res.json(products);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.create = async (req, res) => {
   let product = new Product();
   try {

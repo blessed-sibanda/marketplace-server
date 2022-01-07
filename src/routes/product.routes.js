@@ -9,6 +9,7 @@ const router = Router();
 router.param('shopId', shopById);
 router.param('productId', productById);
 
+router.get('/', productCtrl.list);
 router.get('/latest', productCtrl.listLatest);
 router.get('/categories', productCtrl.listCategories);
 router.get('/product/:productId', productCtrl.read);
