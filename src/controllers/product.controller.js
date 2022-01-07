@@ -13,7 +13,7 @@ module.exports.create = async (req, res) => {
 
     form.parse(req, async (err, fields, files) => {
       product = new Product(fields);
-      product.shop = req.shop._id;
+      product.shop = req.product._id;
     });
 
     await uploadSingleFile(req, res);
@@ -70,3 +70,43 @@ module.exports.relatedProducts = async (req, res, next) => {
 };
 
 module.exports.read = async (req, res, next) => res.json(req.product);
+
+const cleanedProductData = (product, data) => {
+  delete data._id;
+  delete data.image;
+  delete data.shop;
+
+  return merge(product, data);
+};
+
+module.exports.update = async (req, res) => {
+  let product = req.product;
+
+  try {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, async (err, fields, files) => {
+      product = cleanedProductData(product, fields);
+    });
+
+    await uploadSingleFile(req, res);
+
+    if (req.file) {
+      await removeFile(product.image);
+      product.image = req.file.filename;
+    } else {
+      product = cleanedProductData(product, req.body);
+    }
+
+    await product.save();
+
+    let updatedProduct = await Product.findById(product._id).populate(
+      'shop',
+      '_id name',
+    );
+    return res.json(updatedProduct);
+  } catch (err) {
+    res.status(400).json(formatError(err));
+  }
+};

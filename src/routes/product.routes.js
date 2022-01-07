@@ -11,6 +11,13 @@ router.param('productId', productById);
 
 router.get('/latest', productCtrl.listLatest);
 router.get('/product/:productId', productCtrl.read);
+router.put(
+  '/:shopId/product/:productId',
+  requireAuth,
+  isSeller,
+  isShopOwner,
+  productCtrl.update,
+);
 
 router.post('/:shopId', requireAuth, isSeller, isShopOwner, productCtrl.create);
 router.get('/:shopId', productCtrl.listByShop);
