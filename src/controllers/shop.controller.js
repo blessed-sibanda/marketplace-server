@@ -74,7 +74,7 @@ module.exports.update = async (req, res) => {
     });
 
     await uploadSingleFile(req, res);
-
+    console.log('req.file', req.file);
     if (req.file) {
       await removeFile(shop.image);
       shop.image = req.file.filename;
@@ -88,5 +88,15 @@ module.exports.update = async (req, res) => {
     return res.json(updatedShop);
   } catch (err) {
     res.status(400).json(formatError(err));
+  }
+};
+
+module.exports.delete = async (req, res, next) => {
+  try {
+    await removeFile(req.shop.image);
+    await req.shop.remove();
+    res.status(204).json({});
+  } catch (err) {
+    next(err);
   }
 };

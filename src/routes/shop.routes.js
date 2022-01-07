@@ -11,5 +11,6 @@ router.get('/user/:userId', requireAuth, shopCtrl.listByOwner);
 router.get('/', shopCtrl.list);
 router.get('/:shopId', shopCtrl.read);
 router.put('/:shopId', requireAuth, isShopOwner, shopCtrl.update);
+router.delete('/:shopId', requireAuth, isShopOwner, shopCtrl.delete);
 
 module.exports = router;
