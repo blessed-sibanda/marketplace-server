@@ -13,7 +13,7 @@ module.exports.create = async (req, res) => {
 
     form.parse(req, async (err, fields, files) => {
       product = new Product(fields);
-      product.shop = req.product._id;
+      product.shop = req.shop._id;
     });
 
     await uploadSingleFile(req, res);
