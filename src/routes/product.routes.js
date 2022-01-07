@@ -9,7 +9,10 @@ const router = Router();
 router.param('shopId', shopById);
 router.param('productId', productById);
 
+router.get('/latest', productCtrl.listLatest);
+
 router.post('/:shopId', requireAuth, isSeller, isShopOwner, productCtrl.create);
 router.get('/:shopId', productCtrl.listByShop);
+router.get('/related/:productId', productCtrl.relatedProducts);
 
 module.exports = router;

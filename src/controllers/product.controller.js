@@ -42,3 +42,29 @@ module.exports.listByShop = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports.listLatest = async (req, res, next) => {
+  try {
+    let products = await Product.find({})
+      .sort('-createdAt')
+      .limit(5)
+      .populate('shop', '_id name');
+    res.json(products);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.relatedProducts = async (req, res, next) => {
+  try {
+    let products = await Product.find({
+      _id: { $ne: req.product },
+      category: req.product.category,
+    })
+      .limit(5)
+      .populate('shop', '_id name');
+    res.json(products);
+  } catch (err) {
+    next(err);
+  }
+};
