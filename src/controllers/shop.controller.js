@@ -33,7 +33,7 @@ module.exports.create = async (req, res) => {
 
 module.exports.list = async (req, res, next) => {
   try {
-    let shops = await Shop.find();
+    let shops = await Shop.find().populate('owner', '_id name');
     res.json(shops);
   } catch (err) {
     next(err);
@@ -42,7 +42,10 @@ module.exports.list = async (req, res, next) => {
 
 module.exports.listByOwner = async (req, res, next) => {
   try {
-    let shops = await Shop.find({ owner: req.params.userId });
+    let shops = await Shop.find({ owner: req.params.userId }).populate(
+      'owner',
+      '_id name',
+    );
     res.json(shops);
   } catch (err) {
     next(err);
